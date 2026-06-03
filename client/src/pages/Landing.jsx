@@ -106,8 +106,8 @@ export default function Landing() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
-                whileHover={{ y: -5, borderColor: 'rgba(16,185,129,0.3)', backgroundColor: 'rgba(13,18,31,0.6)' }}
-                className="rounded-2xl border border-cyber-border bg-cyber-card/45 p-5 space-y-3 transition-all duration-300 shadow-md backdrop-blur-sm"
+                whileHover={{ y: -5 }}
+                className="cyber-panel p-5 space-y-3"
               >
                 <div className="text-2xl">{f.icon}</div>
                 <h3 className="font-bold text-slate-200 text-sm">{f.name}</h3>
@@ -124,7 +124,7 @@ export default function Landing() {
             ['99.9%', 'Heuristic Security Score', 'from-cyber-mint to-teal-500'],
             ['Live', 'Visitor Map Updates', 'from-orange-400 to-amber-500'],
           ].map(([n, l, grad]) => (
-            <div key={l} className="rounded-2xl bg-cyber-card/30 border border-cyber-border/45 p-6 backdrop-blur-sm">
+            <div key={l} className="cyber-panel p-6">
               <div className={`text-4xl font-extrabold bg-gradient-to-r ${grad} bg-clip-text text-transparent`}>{n}</div>
               <div className="text-slate-400 text-xs mt-2 font-medium">{l}</div>
             </div>

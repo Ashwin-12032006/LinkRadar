@@ -32,7 +32,7 @@ export default function Unlock() {
       
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-3xl border border-cyber-border bg-cyber-card/45 p-8 shadow-2xl backdrop-blur-xl relative z-10 space-y-4 text-center"
+        className="w-full max-w-md cyber-panel p-8 relative z-10 space-y-4 text-center"
       >
         <div className="inline-flex h-12 w-12 rounded-2xl bg-emerald-950/20 border border-emerald-500/25 items-center justify-center text-cyber-mint text-xl shadow-lg">
           🔒

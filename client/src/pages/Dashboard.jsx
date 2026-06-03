@@ -135,7 +135,7 @@ export default function Dashboard() {
           </div>
 
           {/* Form to Shorten */}
-          <form onSubmit={createLink} className="rounded-2xl border border-cyber-border bg-cyber-card/45 p-6 space-y-4 shadow-xl">
+          <form onSubmit={createLink} className="cyber-panel p-6 space-y-4">
             <h2 className="font-bold text-slate-200">Create Smart Link</h2>
             <div className="space-y-1">
               <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Destination URL</label>
@@ -218,7 +218,7 @@ export default function Dashboard() {
           </form>
 
           {/* Bulk Upload */}
-          <div className="rounded-2xl border border-cyber-border bg-cyber-card/45 p-5 space-y-3 shadow-xl">
+          <div className="cyber-panel p-5 space-y-3">
             <h3 className="font-bold text-slate-200 text-xs uppercase tracking-wider">Bulk URL Shortener (CSV)</h3>
             <div className="flex items-center gap-3">
               <input
@@ -246,7 +246,7 @@ export default function Dashboard() {
       </div>
 
       {/* Smart Links Directory */}
-      <section className="mt-8 rounded-2xl border border-cyber-border bg-cyber-card/30 p-5 shadow-xl overflow-x-auto backdrop-blur-sm">
+      <section className="mt-8 cyber-panel p-5 overflow-x-auto">
         <h2 className="font-bold mb-4 text-slate-200 text-sm uppercase tracking-wider">Link Registry</h2>
         <table className="w-full text-xs text-left">
           <thead className="text-slate-500 font-bold border-b border-cyber-border/40 uppercase tracking-widest text-[10px]">
