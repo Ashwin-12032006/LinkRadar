@@ -34,6 +34,18 @@ async function main() {
 
   tunnel.on('close', (code) => {
     console.log(`Tunnel process exited with code ${code}. Restarting tunnel in 3 seconds...`);
+    if (serverProcess) {
+      console.log(`Killing server process (PID: ${serverProcess.pid}) due to tunnel closure...`);
+      if (process.platform === 'win32') {
+        try {
+          const { execSync } = require('child_process');
+          execSync(`taskkill /pid ${serverProcess.pid} /f /t`);
+        } catch (e) {}
+      } else {
+        serverProcess.kill();
+      }
+      serverProcess = null;
+    }
     setTimeout(main, 3000);
   });
 }
