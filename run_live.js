@@ -3,10 +3,11 @@ const fs = require('fs');
 const path = require('path');
 
 async function main() {
-  console.log('Starting localtunnel on port 5000...');
+  const subdomain = 'linklens-radar-ashwin';
+  console.log(`Starting localtunnel on port 5000 (subdomain: ${subdomain})...`);
   
   // Spawn localtunnel
-  const tunnel = spawn('npx', ['localtunnel', '--port', '5000'], { shell: true });
+  const tunnel = spawn('npx', ['localtunnel', '--port', '5000', '--subdomain', subdomain], { shell: true });
   
   let tunnelUrl = '';
   
@@ -14,7 +15,7 @@ async function main() {
     const output = data.toString();
     console.log(`[Tunnel]: ${output.trim()}`);
     
-    // Parse URL from output: e.g. "your url is: https://flat-geese-give.localtunnel.me"
+    // Parse URL from output
     const match = output.match(/your url is:\s+(https:\/\/[^\s]+)/i);
     if (match) {
       tunnelUrl = match[1].trim();
@@ -32,15 +33,21 @@ async function main() {
   });
 
   tunnel.on('close', (code) => {
-    console.log(`Tunnel process exited with code ${code}`);
-    process.exit(code);
+    console.log(`Tunnel process exited with code ${code}. Restarting tunnel in 3 seconds...`);
+    setTimeout(main, 3000);
   });
 }
 
+let serverProcess = null;
 function startServer(url) {
+  if (serverProcess) {
+    console.log(`Tunnel reconnected. Server is already active (PID: ${serverProcess.pid}).`);
+    return;
+  }
+
   console.log(`Starting Express backend with BASE_URL and CLIENT_URL set to: ${url}`);
   
-  const server = spawn('node', ['src/server.js'], {
+  serverProcess = spawn('node', ['src/server.js'], {
     cwd: path.join(__dirname, 'server'),
     env: {
       ...process.env,
@@ -50,17 +57,17 @@ function startServer(url) {
     }
   });
 
-  server.stdout.on('data', (data) => {
+  serverProcess.stdout.on('data', (data) => {
     console.log(`[Server]: ${data.toString().trim()}`);
   });
 
-  server.stderr.on('data', (data) => {
+  serverProcess.stderr.on('data', (data) => {
     console.error(`[Server Error]: ${data.toString().trim()}`);
   });
 
-  server.on('close', (code) => {
+  serverProcess.on('close', (code) => {
     console.log(`Server process exited with code ${code}`);
-    process.exit(code);
+    serverProcess = null;
   });
 }
 
