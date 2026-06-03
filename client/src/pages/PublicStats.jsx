@@ -9,7 +9,9 @@ export default function PublicStats() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch(`${API_URL}/public/stats/${shortCode}`)
+    fetch(`${API_URL}/public/stats/${shortCode}`, {
+      headers: { 'bypass-tunnel-reminder': 'true' }
+    })
       .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
       .then(({ ok, d }) => {
         if (!ok) throw new Error(d.message || 'Stats unavailable')

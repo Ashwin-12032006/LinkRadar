@@ -28,7 +28,12 @@ export default function QrStudio() {
     const requestFormat = isBranded ? 'svg' : format
     const url = `${API_URL}/links/${selectedId}/qr?color=${encodeURIComponent(color)}&format=${requestFormat}&logo=${isBranded ? 'true' : 'false'}`
     
-    fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(url, { 
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        'bypass-tunnel-reminder': 'true'
+      } 
+    })
       .then((r) => r.blob())
       .then((blob) => {
         setPreviewUrl((prev) => {

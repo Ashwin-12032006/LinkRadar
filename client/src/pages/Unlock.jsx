@@ -13,7 +13,10 @@ export default function Unlock() {
     try {
       const res = await fetch(`${API_URL}/public/unlock/${shortCode}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'bypass-tunnel-reminder': 'true'
+        },
         credentials: 'include',
         body: JSON.stringify({ password }),
       })

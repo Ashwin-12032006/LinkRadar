@@ -9,7 +9,7 @@ export function authHeaders(token) {
 }
 
 export async function apiFetch(path, { token, method = 'GET', body, formData } = {}) {
-  const headers = {}
+  const headers = { 'bypass-tunnel-reminder': 'true' }
   if (token) headers.Authorization = `Bearer ${token}`
   if (!formData) headers['Content-Type'] = 'application/json'
 
