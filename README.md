@@ -142,20 +142,42 @@ flowchart LR
 - Public stats only appear when link has public stats enabled (default: enabled).
 - Short redirects are served from backend `BASE_URL` port.
 
-## Demo Video Checklist (Required for Review)
+## Automated End-to-End Walkthrough
 
-Record Loom/YouTube showing:
+We have built a fully automated Puppeteer-based end-to-end demo runner that executes the entire user flow: Sign up -> Paste URL -> Analyze URL -> Create `s24` Custom Alias -> Simulate visitor traffic -> Capture live Analytics, QR code Studio & Public statistics.
 
-1. Landing page + signup/login
-2. Paste long URL → preview card + category + threat warning
-3. Create alias + expiry + password-protected link
-4. Click short URL and show visit tracked
-5. Dashboard analytics (timeline, charts, live visitors, badges)
-6. QR studio download
-7. Public stats page
-8. MongoDB sample documents + terminal logs
+### Run the Demo Locally
+You can run this demo yourself locally using:
+```bash
+node run_demo.js
+```
+The screenshots are automatically captured and saved under `demo_screenshots/`.
 
-**Video link placeholder:** `ADD_YOUR_VIDEO_LINK_HERE`
+### Demo Steps & UI Screenshots
+
+#### Step 1: URL Analysis & Preview Card
+When a long URL is pasted, the backend performs AI-based category classification, threat heuristic scanning, and extracts title/description preview data:
+![01_dashboard_pre_creation](demo_screenshots/01_dashboard_pre_creation.png)
+
+#### Step 2: Dashboard Overview & Link Created
+After creating the `s24` smart link:
+![02_dashboard_post_creation](demo_screenshots/02_dashboard_post_creation.png)
+
+#### Step 3: Simulated Traffic Aggregation
+Live click simulation with various User-Agents and IP addresses (e.g. India, US, UK):
+![03_dashboard_with_visits](demo_screenshots/03_dashboard_with_visits.png)
+
+#### Step 4: Core Analytics Dashboard
+Visitor geolocation heatmaps, browser pie charts, click trend timeline charts, and AI-powered performance insights:
+![04_analytics_page](demo_screenshots/04_analytics_page.png)
+
+#### Step 5: QR Code Studio
+Dynamic high-definition QR Code generator supporting custom brand hex-colors and downloads in SVG/PNG format:
+![05_qr_studio_page](demo_screenshots/05_qr_studio_page.png)
+
+#### Step 6: Public Stats Portal
+Secure public-facing statistics portal page that shows public traffic analytics and trend charts:
+![06_public_stats_page](demo_screenshots/06_public_stats_page.png)
 
 ## Sample Output To Capture
 

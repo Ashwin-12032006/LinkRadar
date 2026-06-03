@@ -19,7 +19,10 @@ router.post('/signup', async (req, res) => {
     password: z.string().min(6).max(128),
   });
   const parsed = schema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ message: 'Invalid input', errors: parsed.error.issues });
+  if (!parsed.success) {
+    console.error("Signup validation failed. Request Body:", req.body, "Errors:", parsed.error.issues);
+    return res.status(400).json({ message: 'Invalid input', errors: parsed.error.issues });
+  }
 
   const { name, email, password } = parsed.data;
   if (await User.findOne({ email })) return res.status(409).json({ message: 'Email already exists' });
@@ -31,7 +34,10 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   const schema = z.object({ email: z.string().email(), password: z.string().min(6).max(128) });
   const parsed = schema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ message: 'Invalid input', errors: parsed.error.issues });
+  if (!parsed.success) {
+    console.error("Login validation failed. Request Body:", req.body, "Errors:", parsed.error.issues);
+    return res.status(400).json({ message: 'Invalid input', errors: parsed.error.issues });
+  }
 
   const user = await User.findOne({ email: parsed.data.email });
   if (!user || !(await bcrypt.compare(parsed.data.password, user.passwordHash))) {

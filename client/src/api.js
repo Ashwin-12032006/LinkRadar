@@ -9,10 +9,13 @@ export function authHeaders(token) {
 }
 
 export async function apiFetch(path, { token, method = 'GET', body, formData } = {}) {
-  const headers = token ? authHeaders(token) : {}
+  const headers = {}
+  if (token) headers.Authorization = `Bearer ${token}`
+  if (!formData) headers['Content-Type'] = 'application/json'
+
   const res = await fetch(`${API_URL}${path}`, {
     method,
-    headers: formData ? { Authorization: headers.Authorization } : body ? headers : token ? { Authorization: headers.Authorization } : {},
+    headers,
     body: formData || (body ? JSON.stringify(body) : undefined),
     credentials: 'include',
   })
