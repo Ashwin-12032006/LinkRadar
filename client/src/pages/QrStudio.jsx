@@ -11,6 +11,7 @@ export default function QrStudio() {
   const [selectedId, setSelectedId] = useState(routeId || '')
   const [color, setColor] = useState('10b981')
   const [format, setFormat] = useState('png')
+  const [qrType, setQrType] = useState('standard') // 'standard' or 'branded'
   const [previewUrl, setPreviewUrl] = useState('')
 
   useEffect(() => {
@@ -22,7 +23,11 @@ export default function QrStudio() {
 
   useEffect(() => {
     if (!selectedId || !token) return
-    const url = `${API_URL}/links/${selectedId}/qr?color=${encodeURIComponent(color)}&format=${format}`
+    const isBranded = qrType === 'branded'
+    // If branded, we always request SVG backend format to stitch the SVG vector logo
+    const requestFormat = isBranded ? 'svg' : format
+    const url = `${API_URL}/links/${selectedId}/qr?color=${encodeURIComponent(color)}&format=${requestFormat}&logo=${isBranded ? 'true' : 'false'}`
+    
     fetch(url, { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => r.blob())
       .then((blob) => {
@@ -35,14 +40,40 @@ export default function QrStudio() {
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl)
     }
-  }, [selectedId, color, format, token])
+  }, [selectedId, color, format, qrType, token])
 
   const download = () => {
     if (!previewUrl) return
-    const a = document.createElement('a')
-    a.href = previewUrl
-    a.download = `linklens-qr.${format === 'svg' ? 'svg' : 'png'}`
-    a.click()
+    
+    if (format === 'png' && qrType === 'branded') {
+      // Convert SVG vector to a high DPI PNG image using Canvas
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 640
+        canvas.height = 640
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = '#FFFFFF'
+        ctx.fillRect(0, 0, 640, 640)
+        ctx.drawImage(img, 0, 0, 640, 640)
+        
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = `linklens-branded-qr.png`
+          a.click()
+          URL.revokeObjectURL(url)
+        }, 'image/png')
+      }
+      img.src = previewUrl
+    } else {
+      const a = document.createElement('a')
+      a.href = previewUrl
+      a.download = `linklens-${qrType}-qr.${format === 'svg' ? 'svg' : 'png'}`
+      a.click()
+    }
   }
 
   return (
@@ -70,6 +101,34 @@ export default function QrStudio() {
               ))}
               {links.length === 0 && <option value="">No links available</option>}
             </select>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">QR Style Options</label>
+            <div className="grid grid-cols-2 gap-2 mt-1">
+              <button
+                type="button"
+                onClick={() => setQrType('standard')}
+                className={`rounded-xl py-2.5 text-[10px] font-bold border transition-all duration-300 cursor-pointer ${
+                  qrType === 'standard'
+                    ? 'bg-emerald-950/40 border-cyber-mint text-cyber-mint'
+                    : 'bg-slate-900 border-cyber-border text-slate-450 hover:text-slate-200'
+                }`}
+              >
+                Standard QR
+              </button>
+              <button
+                type="button"
+                onClick={() => setQrType('branded')}
+                className={`rounded-xl py-2.5 text-[10px] font-bold border transition-all duration-300 cursor-pointer ${
+                  qrType === 'branded'
+                    ? 'bg-emerald-950/40 border-cyber-mint text-cyber-mint'
+                    : 'bg-slate-900 border-cyber-border text-slate-455 hover:text-slate-200'
+                }`}
+              >
+                Branded (Eye Logo)
+              </button>
+            </div>
           </div>
 
           <div className="space-y-1">
@@ -120,7 +179,9 @@ export default function QrStudio() {
               <div className="bg-white p-4 rounded-2xl shadow-xl shadow-black/45 inline-block border border-cyber-border/40 hover:scale-[1.02] transition-transform duration-300">
                 <img src={previewUrl} alt="QR Matrix Preview" className="w-48 h-48 block" />
               </div>
-              <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Live Vector Render</p>
+              <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
+                {qrType === 'branded' ? 'Branded Matrix Render' : 'Standard Matrix Render'}
+              </p>
             </div>
           ) : (
             <div className="text-center space-y-2 z-10">
