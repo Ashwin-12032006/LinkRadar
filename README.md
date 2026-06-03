@@ -1,4 +1,4 @@
-# LinkLens AI — Smart URL Intelligence Platform
+# LinkRadar AI — Smart URL Intelligence Platform
 
 **LinkLens AI** is a hackathon-grade URL shortener that goes beyond basic click counting. It combines AI-style URL intelligence, security checks, live visitor tracking, rich analytics, QR studio, and public stats into one cohesive product.
 
