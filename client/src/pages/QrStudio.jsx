@@ -9,7 +9,7 @@ export default function QrStudio() {
   const { token } = useAuth()
   const [links, setLinks] = useState([])
   const [selectedId, setSelectedId] = useState(routeId || '')
-  const [color, setColor] = useState('6366f1')
+  const [color, setColor] = useState('10b981')
   const [format, setFormat] = useState('png')
   const [previewUrl, setPreviewUrl] = useState('')
 
@@ -47,47 +47,93 @@ export default function QrStudio() {
 
   return (
     <AppLayout>
-      <h1 className="text-2xl font-bold mb-4">QR Code Studio</h1>
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3">
-          <label className="block text-sm">
-            Select Link
+      <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent border-b border-cyber-border/40 pb-4">
+        QR Code Studio
+      </h1>
+
+      <div className="grid md:grid-cols-2 gap-6 mt-6">
+        {/* Controls Card */}
+        <div className="rounded-2xl border border-cyber-border bg-cyber-card/45 p-6 space-y-4 shadow-xl">
+          <h2 className="font-bold text-sm text-slate-200 uppercase tracking-wider">Configure QR Matrix</h2>
+          
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Select Smart Link</label>
             <select
-              className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2"
+              className="mt-1 w-full rounded-xl border border-cyber-border bg-slate-900 px-3 py-3 text-xs text-slate-100 focus:outline-none focus:border-cyber-mint/60"
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
             >
               {links.map((l) => (
                 <option key={l.id} value={l.id}>
-                  {l.shortCode} — {l.originalUrl.slice(0, 40)}
+                  /{l.shortCode} — {l.originalUrl.slice(0, 35)}...
                 </option>
               ))}
+              {links.length === 0 && <option value="">No links available</option>}
             </select>
-          </label>
-          <label className="block text-sm">
-            Custom Color (hex without #)
-            <input className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2" value={color} onChange={(e) => setColor(e.target.value)} />
-          </label>
-          <label className="block text-sm">
-            Format
-            <select className="mt-1 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2" value={format} onChange={(e) => setFormat(e.target.value)}>
-              <option value="png">PNG</option>
-              <option value="svg">SVG</option>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">QR Code Fill Color (Hex)</label>
+            <div className="flex gap-2 items-center">
+              <input
+                className="w-full rounded-xl border border-cyber-border bg-slate-900 px-3 py-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-mint/60"
+                value={color}
+                onChange={(e) => setColor(e.target.value.replace('#', ''))}
+                placeholder="e.g. 10b981"
+              />
+              <div
+                className="w-10 h-10 rounded-xl border border-cyber-border flex-shrink-0 shadow-inner"
+                style={{ backgroundColor: `#${color}` }}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Export Format</label>
+            <select
+              className="mt-1 w-full rounded-xl border border-cyber-border bg-slate-900 px-3 py-3 text-xs text-slate-100 focus:outline-none focus:border-cyber-mint/60"
+              value={format}
+              onChange={(e) => setFormat(e.target.value)}
+            >
+              <option value="png">PNG Bitmap</option>
+              <option value="svg">SVG Vector XML</option>
             </select>
-          </label>
-          <button onClick={download} className="rounded-lg bg-indigo-500 px-4 py-2 font-semibold">
-            Download QR
-          </button>
+          </div>
+
+          <div className="pt-2">
+            <button
+              onClick={download}
+              disabled={!previewUrl}
+              className="w-full rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white py-3 font-semibold text-xs transition-all duration-300 shadow-md shadow-emerald-500/10 cursor-pointer disabled:opacity-50"
+            >
+              Download Export
+            </button>
+          </div>
         </div>
-        <div className="rounded-xl border border-slate-700 bg-slate-900 p-4 flex items-center justify-center min-h-[320px]">
+
+        {/* Preview Frame */}
+        <div className="rounded-2xl border border-cyber-border bg-cyber-card/30 p-6 flex flex-col items-center justify-center min-h-[340px] shadow-xl relative overflow-hidden backdrop-blur-sm">
+          <div className="absolute top-[-30%] left-[-30%] w-60 h-60 bg-cyber-mint/5 rounded-full blur-[80px]" />
+          
           {previewUrl ? (
-            <img src={previewUrl} alt="QR preview" className="max-w-full rounded-lg bg-white p-3" />
+            <div className="space-y-4 text-center z-10">
+              <div className="bg-white p-4 rounded-2xl shadow-xl shadow-black/45 inline-block border border-cyber-border/40 hover:scale-[1.02] transition-transform duration-300">
+                <img src={previewUrl} alt="QR Matrix Preview" className="w-48 h-48 block" />
+              </div>
+              <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Live Vector Render</p>
+            </div>
           ) : (
-            <p className="text-slate-400">Create a link first</p>
+            <div className="text-center space-y-2 z-10">
+              <p className="text-slate-500 text-xs font-semibold">No active URL linked.</p>
+              <p className="text-[10px] text-slate-600 max-w-[200px]">Create an intelligent link from the console to automatically map a QR Matrix here.</p>
+            </div>
           )}
         </div>
       </div>
-      <p className="text-sm text-slate-500 mt-3">Supports normal, custom color, and downloadable PNG/SVG formats.</p>
+      <p className="text-[10px] text-slate-500 font-semibold mt-4">
+        * Supports hex parameter overrides, responsive vector grids, and high-DPI scaling presets.
+      </p>
     </AppLayout>
   )
 }
+

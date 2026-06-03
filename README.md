@@ -144,6 +144,10 @@ flowchart LR
 
 ## Automated End-to-End Walkthrough
 
+### 🎥 Watch the Demo Video Walkthrough
+- **Direct Video stream:** [https://tmpfiles.org/dl/w7w5gf9HBXZ4/demo_walkthrough.mp4](https://tmpfiles.org/dl/w7w5gf9HBXZ4/demo_walkthrough.mp4)
+- **Watch in Browser:** [https://tmpfiles.org/w7w5gf9HBXZ4/demo_walkthrough.mp4](https://tmpfiles.org/w7w5gf9HBXZ4/demo_walkthrough.mp4)
+
 We have built a fully automated Puppeteer-based end-to-end demo runner that executes the entire user flow: Sign up -> Paste URL -> Analyze URL -> Create `s24` Custom Alias -> Simulate visitor traffic -> Capture live Analytics, QR code Studio & Public statistics.
 
 ### Run the Demo Locally

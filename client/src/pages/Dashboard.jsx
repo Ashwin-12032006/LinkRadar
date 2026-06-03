@@ -113,102 +113,216 @@ export default function Dashboard() {
   return (
     <AppLayout>
       <div className="grid lg:grid-cols-3 gap-6">
-        <section className="lg:col-span-2 space-y-4">
-          <div className="rounded-xl border border-indigo-500/40 bg-indigo-950/40 p-4">
-            <h2 className="font-semibold text-indigo-200">AI Insights</h2>
-            <p className="text-sm text-slate-300 mt-1">
+        <section className="lg:col-span-2 space-y-6">
+          {/* AI Insights & Real-time Pulsing */}
+          <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-emerald-950/10 to-teal-950/15 p-5 shadow-lg backdrop-blur-md relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-cyber-mint/5 rounded-full blur-2xl pointer-events-none" />
+            <h2 className="font-bold text-base text-slate-100 flex items-center gap-2">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-cyber-mint animate-ping" />
+              AI Insights Core
+            </h2>
+            <p className="text-sm text-slate-300 mt-2 leading-relaxed">
               {summary?.topLink
-                ? `Top performer: ${summary.topLink.shortCode} with ${summary.topLink.clickCount} clicks.`
-                : 'Create your first smart link to unlock AI insights.'}
+                ? `Top performer is currently "/${summary.topLink.shortCode}" drawing a solid ${summary.topLink.clickCount} clicks.`
+                : 'Welcome! Create your first shortened URL link to start generating real-time AI category insights.'}
             </p>
-            <p className="text-sm text-slate-300">Live visitors (last 60s): <strong>{liveCount}</strong> {liveBars}</p>
+            <div className="mt-4 flex items-center justify-between text-xs border-t border-cyber-border/40 pt-3">
+              <span className="text-slate-400 font-semibold uppercase tracking-wider">Live visitors (last 60s)</span>
+              <span className="text-cyber-mint font-bold bg-slate-900 px-3 py-1 rounded-full border border-cyber-border">
+                {liveCount} {liveBars && `· ${liveBars}`}
+              </span>
+            </div>
           </div>
 
-          <form onSubmit={createLink} className="rounded-xl border border-slate-700 bg-slate-900 p-4 space-y-3">
-            <h2 className="font-semibold">Create Smart Link</h2>
-            <input
-              className="w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2"
-              placeholder="https://www.amazon.in/product..."
-              value={form.originalUrl}
-              onChange={(e) => setForm({ ...form, originalUrl: e.target.value })}
-              onBlur={analyzeUrl}
-              required
-            />
+          {/* Form to Shorten */}
+          <form onSubmit={createLink} className="rounded-2xl border border-cyber-border bg-cyber-card/45 p-6 space-y-4 shadow-xl">
+            <h2 className="font-bold text-slate-200">Create Smart Link</h2>
+            <div className="space-y-1">
+              <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Destination URL</label>
+              <input
+                className="w-full rounded-xl border border-cyber-border bg-slate-900/60 px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-mint/60 transition-colors"
+                placeholder="https://www.amazon.in/product..."
+                value={form.originalUrl}
+                onChange={(e) => setForm({ ...form, originalUrl: e.target.value })}
+                onBlur={analyzeUrl}
+                required
+              />
+            </div>
+
             {preview && (
-              <div className="rounded-lg border border-slate-600 bg-slate-800 p-3 text-sm">
-                <div className="font-semibold text-cyan-300">Category: {preview.category}</div>
-                <div className={preview.threat.level === 'warning' ? 'text-amber-300' : 'text-emerald-300'}>
-                  {preview.threat.level === 'warning' ? '⚠ Warning: ' : '✓ '}
-                  {preview.threat.message}
+              <div className="rounded-xl border border-cyber-border bg-slate-900/40 p-4 text-xs space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-slate-400">Classified Category:</span>
+                  <span className="rounded-full bg-emerald-950/40 border border-emerald-500/20 px-3 py-0.5 font-bold text-cyber-mint">
+                    {preview.category}
+                  </span>
                 </div>
-                <div className="mt-2 font-medium">{preview.preview?.title}</div>
-                <div className="text-slate-400">{preview.preview?.description}</div>
+                <div className="flex items-center gap-1.5 font-bold">
+                  {preview.threat.level === 'warning' ? (
+                    <span className="text-cyber-orange">⚠ Warning: {preview.threat.message}</span>
+                  ) : (
+                    <span className="text-emerald-400">✓ Secure: {preview.threat.message}</span>
+                  )}
+                </div>
+                {preview.preview?.title && (
+                  <div className="border-t border-cyber-border/40 pt-2 mt-2 space-y-1">
+                    <div className="font-bold text-slate-300">{preview.preview.title}</div>
+                    <div className="text-slate-500 line-clamp-2 leading-relaxed">{preview.preview.description}</div>
+                  </div>
+                )}
               </div>
             )}
-            <div className="grid md:grid-cols-3 gap-2">
-              <input className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2" placeholder="Custom alias (s24)" value={form.customAlias} onChange={(e) => setForm({ ...form, customAlias: e.target.value })} />
-              <input className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2" placeholder="Expires in days" type="number" value={form.expiresInDays} onChange={(e) => setForm({ ...form, expiresInDays: e.target.value })} />
-              <input className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2" placeholder="Password (optional)" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+
+            <div className="grid sm:grid-cols-3 gap-3">
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Custom Alias</label>
+                <input
+                  className="w-full rounded-xl border border-cyber-border bg-slate-900/60 px-4 py-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-mint/60 transition-colors"
+                  placeholder="Custom alias (e.g. s24)"
+                  value={form.customAlias}
+                  onChange={(e) => setForm({ ...form, customAlias: e.target.value })}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Expiry (Days)</label>
+                <input
+                  className="w-full rounded-xl border border-cyber-border bg-slate-900/60 px-4 py-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-mint/60 transition-colors"
+                  placeholder="Expires in days"
+                  type="number"
+                  value={form.expiresInDays}
+                  onChange={(e) => setForm({ ...form, expiresInDays: e.target.value })}
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Password (Optional)</label>
+                <input
+                  className="w-full rounded-xl border border-cyber-border bg-slate-900/60 px-4 py-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-mint/60 transition-colors"
+                  placeholder="Redirect Password"
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                />
+              </div>
             </div>
-            <button disabled={status.loading} className="rounded-lg bg-indigo-500 px-4 py-2 font-semibold hover:bg-indigo-400">
-              Shorten with AI
-            </button>
+
+            <div className="pt-2 flex justify-between items-center gap-4">
+              <button
+                disabled={status.loading}
+                className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-6 py-3 font-semibold text-xs transition-all duration-300 shadow-md shadow-emerald-500/10 cursor-pointer"
+              >
+                {status.loading ? 'Shortening...' : 'Shorten with AI'}
+              </button>
+              {form.ignoreThreatWarning && (
+                <span className="text-[10px] text-cyber-orange font-semibold animate-pulse">Threat Bypass Mode Active</span>
+              )}
+            </div>
           </form>
 
-          <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
-            <h3 className="font-semibold mb-2">Bulk URL Shortener (CSV)</h3>
-            <input type="file" accept=".csv,text/csv" onChange={uploadBulk} />
+          {/* Bulk Upload */}
+          <div className="rounded-2xl border border-cyber-border bg-cyber-card/45 p-5 space-y-3 shadow-xl">
+            <h3 className="font-bold text-slate-200 text-xs uppercase tracking-wider">Bulk URL Shortener (CSV)</h3>
+            <div className="flex items-center gap-3">
+              <input
+                type="file"
+                accept=".csv,text/csv"
+                onChange={uploadBulk}
+                className="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-950 file:text-cyber-mint hover:file:bg-emerald-900 transition-colors cursor-pointer"
+              />
+            </div>
             {bulkResult && (
-              <p className="text-sm text-emerald-300 mt-2">
-                Created {bulkResult.created?.length || 0} links, {bulkResult.failed?.length || 0} failed.
+              <p className="text-xs text-cyber-mint font-semibold mt-2">
+                Processed successfully. Created {bulkResult.created?.length || 0} links, {bulkResult.failed?.length || 0} failed entries.
               </p>
             )}
           </div>
 
-          {status.error && <p className="text-red-400">{status.error}</p>}
-          {status.success && <p className="text-emerald-400">{status.success}</p>}
+          {status.error && <p className="text-rose-400 text-xs font-semibold">⚠️ {status.error}</p>}
+          {status.success && <p className="text-cyber-mint text-xs font-semibold">✓ {status.success}</p>}
         </section>
 
-        <aside>
-          <PieChartCard title="URL Categories" items={summary?.categories || []} />
+        {/* Sidebar Analytics Visuals */}
+        <aside className="space-y-6">
+          <PieChartCard title="URL Category Breakdown" items={summary?.categories || []} />
         </aside>
       </div>
 
-      <section className="mt-6 rounded-xl border border-slate-700 bg-slate-900 p-4 overflow-x-auto">
-        <h2 className="font-semibold mb-3">Your Smart Links</h2>
-        <table className="w-full text-sm">
-          <thead className="text-slate-400">
+      {/* Smart Links Directory */}
+      <section className="mt-8 rounded-2xl border border-cyber-border bg-cyber-card/30 p-5 shadow-xl overflow-x-auto backdrop-blur-sm">
+        <h2 className="font-bold mb-4 text-slate-200 text-sm uppercase tracking-wider">Link Registry</h2>
+        <table className="w-full text-xs text-left">
+          <thead className="text-slate-500 font-bold border-b border-cyber-border/40 uppercase tracking-widest text-[10px]">
             <tr>
-              <th className="text-left p-2">Original</th>
-              <th className="text-left p-2">Short URL</th>
-              <th className="text-left p-2">Category</th>
-              <th className="text-left p-2">Clicks</th>
-              <th className="text-left p-2">Status</th>
-              <th className="text-left p-2">Actions</th>
+              <th className="pb-3 px-3">Target Destination</th>
+              <th className="pb-3 px-3">Alias</th>
+              <th className="pb-3 px-3">AI Tag</th>
+              <th className="pb-3 px-3">Clicks</th>
+              <th className="pb-3 px-3 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-cyber-border/40">
             {links.map((link) => (
-              <tr key={link.id} className="border-t border-slate-800">
-                <td className="p-2 max-w-xs truncate">{link.originalUrl}</td>
-                <td className="p-2">
-                  <a className="text-cyan-300" href={link.shortUrl} target="_blank" rel="noreferrer">{link.shortUrl}</a>
+              <tr key={link.id} className="hover:bg-slate-900/20 transition-colors">
+                <td className="py-4 px-3 max-w-xs truncate text-slate-300 font-medium">{link.originalUrl}</td>
+                <td className="py-4 px-3">
+                  <a className="text-cyber-mint hover:underline font-semibold" href={link.shortUrl} target="_blank" rel="noreferrer">
+                    /{link.shortCode}
+                  </a>
                 </td>
-                <td className="p-2">{link.category}</td>
-                <td className="p-2">{link.clickCount}</td>
-                <td className="p-2">{link.status}</td>
-                <td className="p-2 flex flex-wrap gap-2">
-                  <button onClick={() => navigator.clipboard.writeText(link.shortUrl)} className="rounded bg-slate-700 px-2 py-1">Copy</button>
-                  <Link to={`/analytics/${link.id}`} className="rounded bg-indigo-600 px-2 py-1">Analytics</Link>
-                  <Link to={`/qr/${link.id}`} className="rounded bg-slate-700 px-2 py-1">QR</Link>
-                  <Link to={`/stats/${link.shortCode}`} className="rounded bg-slate-700 px-2 py-1">Public</Link>
-                  <button onClick={() => remove(link.id)} className="rounded bg-red-700 px-2 py-1">Delete</button>
+                <td className="py-4 px-3">
+                  <span className="rounded-full bg-emerald-950/30 border border-emerald-500/10 px-2.5 py-0.5 text-[10px] text-cyber-mint font-semibold">
+                    {link.category}
+                  </span>
+                </td>
+                <td className="py-4 px-3 text-slate-200 font-bold">{link.clickCount}</td>
+                <td className="py-4 px-3">
+                  <div className="flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(link.shortUrl)
+                        alert('Copied URL to Clipboard!')
+                      }}
+                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300 cursor-pointer"
+                    >
+                      Copy
+                    </button>
+                    <Link
+                      to={`/analytics/${link.id}`}
+                      className="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-2.5 py-1.5 text-[10px] font-semibold text-white shadow-md shadow-emerald-500/5"
+                    >
+                      Analytics
+                    </Link>
+                    <Link
+                      to={`/qr/${link.id}`}
+                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300"
+                    >
+                      QR Studio
+                    </Link>
+                    <Link
+                      to={`/stats/${link.shortCode}`}
+                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300"
+                    >
+                      Public
+                    </Link>
+                    <button
+                      onClick={() => remove(link.id)}
+                      className="rounded-lg bg-rose-950/40 hover:bg-rose-900/60 border border-rose-900/30 px-2.5 py-1.5 text-[10px] font-semibold text-rose-400 cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
+            {links.length === 0 && (
+              <tr>
+                <td colSpan={5} className="py-8 text-center text-slate-500 font-medium">
+                  No active smart links recorded. Paste a destination URL above to initialize.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </section>
     </AppLayout>
   )
 }
+
