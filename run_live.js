@@ -6,7 +6,7 @@ async function main() {
   console.log('Starting localtunnel on port 5000...');
   
   // Spawn localtunnel
-  const tunnel = spawn('npx', ['localtunnel', '--port', '5000']);
+  const tunnel = spawn('npx', ['localtunnel', '--port', '5000'], { shell: true });
   
   let tunnelUrl = '';
   
