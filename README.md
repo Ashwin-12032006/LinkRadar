@@ -145,8 +145,8 @@ flowchart LR
 ## Automated End-to-End Walkthrough
 
 ### 🎥 Watch the Demo Video Walkthrough
-- **Direct Video stream:** [https://tmpfiles.org/dl/wRwxgTRpdo45/demo_walkthrough.mp4](https://tmpfiles.org/dl/wRwxgTRpdo45/demo_walkthrough.mp4)
-- **Watch in Browser:** [https://tmpfiles.org/wRwxgTRpdo45/demo_walkthrough.mp4](https://tmpfiles.org/wRwxgTRpdo45/demo_walkthrough.mp4)
+- **Direct Video stream:** [https://github.com/Ashwin-12032006/Linklens-AI/raw/main/demo_walkthrough.mp4](https://github.com/Ashwin-12032006/Linklens-AI/raw/main/demo_walkthrough.mp4)
+- **Watch in Browser:** [https://github.com/Ashwin-12032006/Linklens-AI/blob/main/demo_walkthrough.mp4](https://github.com/Ashwin-12032006/Linklens-AI/blob/main/demo_walkthrough.mp4)
 
 We have built a fully automated Puppeteer-based end-to-end demo runner that executes the entire user flow: Sign up -> Paste URL -> Analyze URL -> Create `s24` Custom Alias -> Simulate visitor traffic -> Capture live Analytics, QR code Studio & Public statistics.
 
