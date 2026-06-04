@@ -24,6 +24,13 @@ export default function Dashboard() {
   const [preview, setPreview] = useState(null)
   const [status, setStatus] = useState({ loading: false, error: '', success: '' })
   const [bulkResult, setBulkResult] = useState(null)
+  const [activeMenuId, setActiveMenuId] = useState(null)
+
+  useEffect(() => {
+    const handleClose = () => setActiveMenuId(null)
+    window.addEventListener('click', handleClose)
+    return () => window.removeEventListener('click', handleClose)
+  }, [])
 
   const load = async () => {
     const [linksRes, summaryRes] = await Promise.all([
@@ -307,41 +314,102 @@ export default function Dashboard() {
                   </span>
                 </td>
                 <td className="py-4 px-3 text-slate-200 font-bold">{link.clickCount}</td>
-                <td className="py-4 px-3">
-                  <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 max-w-[150px] sm:max-w-none mx-auto">
+                <td className="py-4 px-3 text-center relative">
+                  {/* Desktop Inline Actions (Laptops and Tablets) */}
+                  <div className="hidden md:flex items-center justify-center gap-2">
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(link.shortUrl)
                         alert('Copied URL to Clipboard!')
                       }}
-                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300 cursor-pointer"
+                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300 cursor-pointer animate-fade-in"
                     >
                       Copy
                     </button>
                     <Link
                       to={`/analytics/${link.id}`}
-                      className="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-2.5 py-1.5 text-[10px] font-semibold text-white shadow-md shadow-emerald-500/5"
+                      className="rounded-lg bg-emerald-600 hover:bg-emerald-500 px-2.5 py-1.5 text-[10px] font-semibold text-white shadow-md shadow-emerald-500/5 transition-all duration-300"
                     >
                       Analytics
                     </Link>
                     <Link
                       to={`/qr/${link.id}`}
-                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300"
+                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300 transition-colors"
                     >
                       QR Studio
                     </Link>
                     <Link
                       to={`/stats/${link.shortCode}`}
-                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300"
+                      className="rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyber-border px-2.5 py-1.5 text-[10px] font-semibold text-slate-300 transition-colors"
                     >
                       Public
                     </Link>
                     <button
                       onClick={() => remove(link.id)}
-                      className="rounded-lg bg-rose-950/40 hover:bg-rose-900/60 border border-rose-900/30 px-2.5 py-1.5 text-[10px] font-semibold text-rose-400 cursor-pointer"
+                      className="rounded-lg bg-rose-950/40 hover:bg-rose-900/60 border border-rose-900/30 px-2.5 py-1.5 text-[10px] font-semibold text-rose-400 cursor-pointer transition-colors"
                     >
                       Delete
                     </button>
+                  </div>
+
+                  {/* Mobile Dropdown Trigger (Smartphones) */}
+                  <div className="md:hidden flex items-center justify-center">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setActiveMenuId(activeMenuId === link.id ? null : link.id)
+                      }}
+                      className="h-8 w-8 rounded-lg bg-slate-900 border border-cyber-border flex items-center justify-center text-slate-300 hover:text-white transition-colors cursor-pointer"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                      </svg>
+                    </button>
+
+                    {activeMenuId === link.id && (
+                      <div className="absolute right-3 top-12 w-32 rounded-xl border border-cyber-border bg-[#0d121f]/95 backdrop-blur-md shadow-2xl py-1.5 z-30 flex flex-col text-left">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(link.shortUrl)
+                            alert('Copied URL to Clipboard!')
+                            setActiveMenuId(null)
+                          }}
+                          className="px-3.5 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900/60 transition-colors w-full text-left"
+                        >
+                          Copy URL
+                        </button>
+                        <Link
+                          to={`/analytics/${link.id}`}
+                          onClick={() => setActiveMenuId(null)}
+                          className="px-3.5 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900/60 transition-colors w-full text-left"
+                        >
+                          Analytics
+                        </Link>
+                        <Link
+                          to={`/qr/${link.id}`}
+                          onClick={() => setActiveMenuId(null)}
+                          className="px-3.5 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900/60 transition-colors w-full text-left"
+                        >
+                          QR Studio
+                        </Link>
+                        <Link
+                          to={`/stats/${link.shortCode}`}
+                          onClick={() => setActiveMenuId(null)}
+                          className="px-3.5 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900/60 transition-colors w-full text-left"
+                        >
+                          Public Stats
+                        </Link>
+                        <button
+                          onClick={() => {
+                            remove(link.id)
+                            setActiveMenuId(null)
+                          }}
+                          className="px-3.5 py-2 text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/20 transition-colors w-full text-left border-t border-cyber-border/40 mt-1"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </td>
               </tr>
