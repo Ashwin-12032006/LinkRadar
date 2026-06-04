@@ -10,12 +10,25 @@ export default function Analytics() {
   const { id } = useParams()
   const { token } = useAuth()
   const [data, setData] = useState(null)
+  const [seeding, setSeeding] = useState(false)
   const [liveCount, setLiveCount] = useState(0)
 
   const load = async () => {
     const res = await apiFetch(`/links/${id}/analytics`, { token })
     setData(res)
     setLiveCount(res.liveVisitors)
+  }
+
+  const seedData = async () => {
+    setSeeding(true)
+    try {
+      await apiFetch(`/links/${id}/seed`, { method: 'POST', token })
+      await load()
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setSeeding(false)
+    }
   }
 
   useEffect(() => {
@@ -48,12 +61,21 @@ export default function Analytics() {
           </h1>
           <p className="text-slate-500 text-xs truncate max-w-md sm:max-w-2xl mt-1 font-medium">{link.originalUrl}</p>
         </div>
-        <Link to="/dashboard" className="text-cyber-mint hover:text-cyber-mint/80 text-xs font-semibold flex items-center gap-1 transition-colors">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Registry
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={seedData}
+            disabled={seeding}
+            className="rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 disabled:opacity-50 text-white px-3.5 py-2.5 font-bold text-[10px] uppercase tracking-wider transition-all duration-300 shadow-md shadow-orange-500/10 cursor-pointer flex items-center gap-1.5 border border-orange-500/20"
+          >
+            <span>⚡</span> {seeding ? 'Generating...' : 'Seed Demo Traffic'}
+          </button>
+          <Link to="/dashboard" className="text-cyber-mint hover:text-cyber-mint/80 text-xs font-semibold flex items-center gap-1 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Registry
+          </Link>
+        </div>
       </div>
 
       {/* KPI Cards */}

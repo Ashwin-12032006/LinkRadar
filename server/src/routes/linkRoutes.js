@@ -140,4 +140,63 @@ router.get('/:id/qr', async (req, res) => {
   return res.send(png);
 });
 
+router.post('/:id/seed', async (req, res) => {
+  const link = await Link.findOne({ _id: req.params.id, userId: req.user.id });
+  if (!link) return res.status(404).json({ message: 'Link not found' });
+
+  // Clear existing mock visits first if they exist to keep it clean
+  await Visit.deleteMany({ linkId: link._id });
+
+  const visits = [];
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+  
+  const regions = [
+    { country: 'India', region: 'Maharashtra', city: 'Mumbai' },
+    { country: 'India', region: 'Karnataka', city: 'Bengaluru' },
+    { country: 'India', region: 'Tamil Nadu', city: 'Chennai' },
+    { country: 'India', region: 'Delhi', city: 'New Delhi' },
+    { country: 'India', region: 'Telangana', city: 'Hyderabad' },
+    { country: 'India', region: 'Maharashtra', city: 'Pune' },
+    { country: 'India', region: 'West Bengal', city: 'Kolkata' },
+  ];
+  
+  const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge'];
+  const devices = ['Desktop', 'Mobile', 'Tablet'];
+  const osList = ['Windows', 'MacOS', 'iOS', 'Android'];
+
+  // Seed 24 clicks over the last 7 days
+  for (let i = 0; i < 24; i++) {
+    const daysAgo = Math.floor(Math.random() * 7);
+    const hourOffset = Math.floor(Math.random() * 24);
+    const visitedAt = new Date(now - (daysAgo * oneDay) - (hourOffset * 60 * 60 * 1000));
+    
+    const geo = regions[Math.floor(Math.random() * regions.length)];
+    const browser = browsers[Math.floor(Math.random() * browsers.length)];
+    const device = devices[Math.floor(Math.random() * devices.length)];
+    const os = osList[Math.floor(Math.random() * osList.length)];
+    
+    visits.push({
+      linkId: link._id,
+      visitedAt,
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      ipAddress: `122.160.0.${Math.floor(Math.random() * 254) + 1}`,
+      browser,
+      device,
+      os,
+      country: geo.country,
+      city: geo.city,
+      region: geo.region
+    });
+  }
+
+  await Visit.insertMany(visits);
+  
+  link.clickCount = visits.length;
+  link.lastVisitedAt = new Date();
+  await link.save();
+
+  return res.json({ success: true, count: visits.length });
+});
+
 module.exports = router;
