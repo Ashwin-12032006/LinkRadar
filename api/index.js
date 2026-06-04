@@ -20,6 +20,13 @@ module.exports = async (req, res) => {
     }
   }
 
+  // Restore the original path if rewritten by Vercel
+  const url = require('url');
+  const parsed = url.parse(req.url, true);
+  if (parsed.query && parsed.query.originalUrl) {
+    req.url = parsed.query.originalUrl;
+  }
+
   // Make sure we trust proxy headers forwarded by Vercel's load balancers
   app.set('trust proxy', 1);
 

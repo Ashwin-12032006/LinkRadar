@@ -17,7 +17,7 @@
     },
     {
       "source": "/([^/\\.]+)",
-      "destination": "/api/index.js"
+      "destination": "/api/index.js?originalUrl=/$1"
     },
     {
       "source": "/(.*)",
