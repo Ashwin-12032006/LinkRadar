@@ -37,7 +37,12 @@ app.use(express.static(path.join(__dirname, '../../client/dist')));
 
 // SPA Wildcard Route Fallback
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+  const indexPath = path.join(__dirname, '../../client/dist/index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.status(404).json({ message: 'Route not found' });
+    }
+  });
 });
 
 app.use((err, req, res, next) => {
