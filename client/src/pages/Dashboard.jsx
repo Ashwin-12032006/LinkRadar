@@ -308,7 +308,7 @@ export default function Dashboard() {
                 </td>
                 <td className="py-4 px-3 text-slate-200 font-bold">{link.clickCount}</td>
                 <td className="py-4 px-3">
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 max-w-[150px] sm:max-w-none mx-auto">
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(link.shortUrl)

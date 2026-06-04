@@ -87,8 +87,8 @@ export function AppLayout({ children }) {
         </aside>
 
         {/* Scrollable Content Pane */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6 scrollbar-thin scrollbar-thumb-cyber-border scrollbar-track-transparent">
-          <div className="max-w-6xl mx-auto space-y-6">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 pb-24 md:pb-6 scrollbar-thin scrollbar-thumb-cyber-border scrollbar-track-transparent">
+          <div className="w-full max-w-full md:max-w-6xl mx-auto space-y-6">
             {children}
           </div>
         </main>
