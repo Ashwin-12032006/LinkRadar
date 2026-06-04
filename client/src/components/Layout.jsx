@@ -17,7 +17,7 @@ export function AppLayout({ children }) {
     }`
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex flex-col bg-cyber-bg text-slate-100 font-sans selection:bg-emerald-500/30">
+    <div className="h-screen w-full max-w-full overflow-hidden flex flex-col bg-cyber-bg text-slate-100 font-sans selection:bg-emerald-500/30">
       {/* Background Glows */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-900/5 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-orange-950/5 rounded-full blur-[120px] pointer-events-none z-0" />
