@@ -115,7 +115,7 @@ router.get('/:id/qr', async (req, res) => {
   const options = { color: { dark: `#${color}`, light: '#FFFFFFFF' }, width: 320 };
   if (format === 'svg') {
     let svg = await QRCode.toString(shortUrl, { ...options, type: 'svg' });
-    if (req.query.logo === 'true') {
+    if (req.query.logo === 'true' || req.query.logo === true) {
       const match = svg.match(/viewBox="0 0 (\d+) (\d+)"/);
       if (match) {
         const M = parseInt(match[1], 10);
