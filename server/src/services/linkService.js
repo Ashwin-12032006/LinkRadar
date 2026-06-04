@@ -1,4 +1,13 @@
-const { customAlphabet } = require('nanoid');
+function customAlphabet(alphabet, size) {
+  return () => {
+    let result = '';
+    const alphabetLength = alphabet.length;
+    for (let i = 0; i < size; i++) {
+      result += alphabet.charAt(Math.floor(Math.random() * alphabetLength));
+    }
+    return result;
+  };
+}
 const bcrypt = require('bcryptjs');
 const Link = require('../models/Link');
 const Visit = require('../models/Visit');
