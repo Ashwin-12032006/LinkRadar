@@ -189,7 +189,7 @@ Secure public-facing statistics portal page that shows public traffic analytics 
 - UI screenshots (dashboard, analytics, QR, public stats)
 - MongoDB entries for `users`, `links`, `visits`
 
-## Hackathon Winning Feature Checklist
+## Feature Checklist
 
 - [x] Custom Alias
 - [x] QR Generator
