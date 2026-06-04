@@ -159,29 +159,38 @@ The screenshots are automatically captured and saved under `demo_screenshots/`.
 
 ### Demo Steps & UI Screenshots
 
-#### Step 1: URL Analysis & Preview Card
-When a long URL is pasted, the backend performs AI-based category classification, threat heuristic scanning, and extracts title/description preview data:
-![01_dashboard_pre_creation](demo_screenshots/01_dashboard_pre_creation.png)
+#### Step 1: User Registration
+Create a secure user account on the cybernetic console:
+![01_signup](demo_screenshots/01_signup.png)
 
-#### Step 2: Dashboard Overview & Link Created
-After creating the `s24` smart link:
-![02_dashboard_post_creation](demo_screenshots/02_dashboard_post_creation.png)
+#### Step 2: Smart URL Safety Analysis
+When a long URL is pasted, the backend analyzes its safety rating and auto-detects its category:
+![03_url_analyzed](demo_screenshots/03_url_analyzed.png)
 
-#### Step 3: Simulated Traffic Aggregation
-Live click simulation with various User-Agents and IP addresses (e.g. India, US, UK):
-![03_dashboard_with_visits](demo_screenshots/03_dashboard_with_visits.png)
+#### Step 3: Smart Link Formed with Decryption Key
+Create the smart link with custom alias, expiration limits, and a secure password:
+![04_smart_link_created](demo_screenshots/04_smart_link_created.png)
 
-#### Step 4: Core Analytics Dashboard
-Visitor geolocation heatmaps, browser pie charts, click trend timeline charts, and AI-powered performance insights:
-![04_analytics_page](demo_screenshots/04_analytics_page.png)
+#### Step 4: Secure Redirection Shields
+Accessing the link prompts visitor browsers to unlock or initiates a sandbox scan countdown:
+![05_unlock_screen](demo_screenshots/05_unlock_screen.png)
+![05b_secure_shield_redirect](demo_screenshots/05b_secure_shield_redirect.png)
 
-#### Step 5: QR Code Studio
-Dynamic high-definition QR Code generator supporting custom brand hex-colors and downloads in SVG/PNG format:
-![05_qr_studio_page](demo_screenshots/05_qr_studio_page.png)
+#### Step 5: Real-Time Click Dashboard
+Real-time Socket.io pings update active click stats on the dashboard console:
+![06_dashboard_with_clicks](demo_screenshots/06_dashboard_with_clicks.png)
 
-#### Step 6: Public Stats Portal
-Secure public-facing statistics portal page that shows public traffic analytics and trend charts:
-![06_public_stats_page](demo_screenshots/06_public_stats_page.png)
+#### Step 6: Advanced Analytics Insights
+Deep-dive into visitor countries heatmaps, browser distributions, and chronological timelines:
+![07_analytics_top](demo_screenshots/07_analytics_top.png)
+
+#### Step 7: Custom Branded QR Studio
+Generate standard or branded vector QR codes with custom fill colors and center logos:
+![11_qr_studio_branded](demo_screenshots/11_qr_studio_branded.png)
+
+#### Step 8: Transparent Public Stats
+Share click traffic metrics transparently with external visitors:
+![12_public_stats_top](demo_screenshots/12_public_stats_top.png)
 
 ## Sample Output To Capture
 

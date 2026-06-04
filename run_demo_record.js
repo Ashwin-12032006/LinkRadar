@@ -39,6 +39,7 @@ const steps = [
   { name: '03_url_analyzed', narration: "We paste our long URL, and the safety engine scans it instantly." },
   { name: '04_smart_link_created', narration: "We enter custom alias s24, and secure it with a redirect password." },
   { name: '05_unlock_screen', narration: "Accessing the short URL redirects visitor browsers to a secure unlock shield." },
+  { name: '05b_secure_shield_redirect', narration: "After unlocking, our dynamic safe redirect shield audits destination safety." },
   { name: '06_dashboard_with_clicks', narration: "Once unlocked, click statistics update automatically on our dashboard." },
   { name: '07_analytics_top', narration: "Open the analytics page to view overall link traffic breakdowns." },
   { name: '08_analytics_charts', narration: "We visualize visitor locations, browser choices, and device distributions." },
@@ -109,9 +110,17 @@ async function main() {
     await delay(3500);
     await capture('03_url_analyzed');
 
-    console.log('4. Entering Custom Alias s24 and password protection...');
+    console.log('4. Entering Custom Alias s24, password protection, and loading shield...');
     await page.type('input[placeholder*="Custom alias"]', 's24');
     await page.type('input[placeholder*="Password"]', 'pass123');
+    console.log('Enabling Secure Loading Shield checkbox...');
+    const shieldLabel = await page.evaluateHandle(() => {
+      return Array.from(document.querySelectorAll('label')).find(el => el.textContent.includes('Secure Loading Shield'));
+    });
+    if (shieldLabel) {
+      await shieldLabel.click();
+      await delay(500);
+    }
     await page.click('form button');
     await delay(3000);
     await capture('04_smart_link_created');
@@ -126,7 +135,9 @@ async function main() {
     if (pwdInput) {
       await pwdInput.type('pass123');
       await page.click('button');
-      await delay(3000); // browser will redirect to local /api/health
+      await delay(1000); // Wait for decrypt validation and transition load
+      await capture('05b_secure_shield_redirect');
+      await delay(3000); // Wait for secure loading shield countdown to finish and redirect
     }
 
     console.log('7. Simulating visitor traffic clicks...');
