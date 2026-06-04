@@ -51,6 +51,8 @@ Katomarans/
 
 ## Setup Instructions
 
+For production deployment to **Vercel** and other platforms, see the [Vercel Deployment Guide](VERCEL_DEPLOYMENT.md).
+
 ### Prerequisites
 
 - Node.js 18+
