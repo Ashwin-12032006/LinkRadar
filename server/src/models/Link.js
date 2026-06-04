@@ -20,6 +20,7 @@ const linkSchema = new mongoose.Schema(
       image: { type: String, default: '' },
       favicon: { type: String, default: '' },
     },
+    isSecureShield: { type: Boolean, default: false },
     performanceScore: { type: Number, default: 0 },
   },
   { timestamps: true }

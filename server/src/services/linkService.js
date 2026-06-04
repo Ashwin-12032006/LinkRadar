@@ -52,6 +52,7 @@ function serializeLink(link) {
     preview: obj.preview,
     performanceScore: obj.performanceScore,
     hasPassword: Boolean(obj.linkPasswordHash),
+    isSecureShield: obj.isSecureShield,
   };
 }
 
@@ -71,6 +72,7 @@ async function createLink(userId, payload) {
     password,
     isPublicStats = true,
     ignoreThreatWarning = false,
+    isSecureShield = false,
   } = payload;
 
   if (!validHttpUrl(originalUrl)) throw new Error('Please provide a valid URL');
@@ -114,6 +116,7 @@ async function createLink(userId, payload) {
     threatLevel: threat.level,
     threatMessage: threat.message,
     preview,
+    isSecureShield,
     performanceScore: 10,
   });
 

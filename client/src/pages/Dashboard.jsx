@@ -17,6 +17,8 @@ export default function Dashboard() {
     customAlias: '',
     expiresInDays: '',
     password: '',
+    isPublicStats: true,
+    isSecureShield: false,
     ignoreThreatWarning: false,
   })
   const [preview, setPreview] = useState(null)
@@ -69,10 +71,12 @@ export default function Dashboard() {
           customAlias: form.customAlias || undefined,
           expiresInDays: form.expiresInDays ? Number(form.expiresInDays) : undefined,
           password: form.password || undefined,
+          isPublicStats: form.isPublicStats,
+          isSecureShield: form.isSecureShield,
           ignoreThreatWarning: form.ignoreThreatWarning,
         },
       })
-      setForm({ originalUrl: '', customAlias: '', expiresInDays: '', password: '', ignoreThreatWarning: false })
+      setForm({ originalUrl: '', customAlias: '', expiresInDays: '', password: '', isPublicStats: true, isSecureShield: false, ignoreThreatWarning: false })
       setPreview(null)
       setStatus({ loading: false, error: '', success: 'Smart link created successfully' })
       await load()
@@ -204,6 +208,28 @@ export default function Dashboard() {
               </div>
             </div>
 
+            <div className="flex flex-wrap gap-6 pt-1">
+              <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={form.isPublicStats}
+                  onChange={(e) => setForm({ ...form, isPublicStats: e.target.checked })}
+                  className="rounded border-cyber-border bg-slate-900 text-cyber-mint focus:ring-0 focus:ring-offset-0 h-4 w-4 cursor-pointer"
+                />
+                Public Stats Portal
+              </label>
+
+              <label className="flex items-center gap-2 text-xs font-semibold text-slate-300 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={form.isSecureShield}
+                  onChange={(e) => setForm({ ...form, isSecureShield: e.target.checked })}
+                  className="rounded border-cyber-border bg-slate-900 text-cyber-mint focus:ring-0 focus:ring-offset-0 h-4 w-4 cursor-pointer"
+                />
+                Enable Secure Loading Shield
+              </label>
+            </div>
+
             <div className="pt-2 flex justify-between items-center gap-4">
               <button
                 disabled={status.loading}
@@ -262,10 +288,18 @@ export default function Dashboard() {
             {links.map((link) => (
               <tr key={link.id} className="hover:bg-slate-900/20 transition-colors">
                 <td className="py-4 px-3 max-w-xs truncate text-slate-300 font-medium">{link.originalUrl}</td>
-                <td className="py-4 px-3">
-                  <a className="text-cyber-mint hover:underline font-semibold" href={link.shortUrl} target="_blank" rel="noreferrer">
-                    /{link.shortCode}
-                  </a>
+                 <td className="py-4 px-3">
+                  <div className="flex items-center gap-1.5">
+                    <a className="text-cyber-mint hover:underline font-semibold" href={link.shortUrl} target="_blank" rel="noreferrer">
+                      /{link.shortCode}
+                    </a>
+                    {link.isSecureShield && (
+                      <span className="text-[11px]" title="Secure Loading Shield Enabled">🛡️</span>
+                    )}
+                    {link.hasPassword && (
+                      <span className="text-[11px]" title="Password Protected">🔒</span>
+                    )}
+                  </div>
                 </td>
                 <td className="py-4 px-3">
                   <span className="rounded-full bg-emerald-950/30 border border-emerald-500/10 px-2.5 py-0.5 text-[10px] text-cyber-mint font-semibold">

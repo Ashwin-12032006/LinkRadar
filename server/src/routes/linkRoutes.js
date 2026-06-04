@@ -31,6 +31,7 @@ router.post('/', async (req, res) => {
     password: z.string().min(4).max(64).optional(),
     isPublicStats: z.boolean().optional(),
     ignoreThreatWarning: z.boolean().optional(),
+    isSecureShield: z.boolean().optional(),
   });
   const parsed = schema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ message: 'Invalid input', errors: parsed.error.issues });
